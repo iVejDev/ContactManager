@@ -1,0 +1,70 @@
+﻿@page "/"
+@using ContactMaster.Blazor.Services
+@using System.Threading.Tasks
+@inject ThemeService ThemeService
+@inject NotificationService NotificationService
+@implements IDisposable
+
+
+<!--
+                    Vad gör denna sida?
+Syfte:
+- Representerar startsidan för applikationen ContactMaster.Blazor.
+- Tillhandahåller en kontaktlista och hanterar teman samt notifieringar.
+
+Ansvar:
+- Dynamiskt ändra temastil (mörkt/ljust läge).
+- Visa notifieringar för användarinteraktioner.
+- Presentera en lista med kontakter genom `ContactList`-komponenten.
+-->
+
+    
+    <!-- Komponent för att växla mellan mörkt och ljust tema -->
+<div class="main-container @ThemeClass">
+    <ThemeToggle />
+
+    <!-- Behållare för notifieringar -->
+    <div class="notification-container">
+        @if (!string.IsNullOrEmpty(NotificationMessage))
+        {
+            <div class="notification @NotificationStyle">
+                @NotificationMessage
+            </div>
+        }
+    </div>
+    
+        <!-- Kontaktlista som anpassar sig efter det aktuella temat -->
+    <ContactList ThemeClass="@ThemeClass" />
+</div>
+
+@code {
+    private string ThemeClass => ThemeService.GetCurrentTheme().GetThemeClass();
+    private string NotificationMessage { get; set; }
+    private string NotificationStyle { get; set; }
+
+    protected override void OnInitialized()
+    {
+        NotificationService.OnNotification += HandleNotification;
+        ThemeService.OnThemeChanged += StateHasChanged;
+    }
+
+
+            // Hanterar notifieringar och visar dem i 3 sekunder
+    private async void HandleNotification(string message, string style)
+    {
+        NotificationMessage = message;
+        NotificationStyle = style;
+        StateHasChanged();
+
+        await Task.Delay(3000);
+        NotificationMessage = null;
+        NotificationStyle = null;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        NotificationService.OnNotification -= HandleNotification;
+        ThemeService.OnThemeChanged -= StateHasChanged;
+    }
+}

@@ -1,0 +1,28 @@
+﻿
+@* 
+                    Vad gör denna fil?
+Syfte:
+- Centraliserar alla nödvändiga `using`-direktiv för Blazor-applikationen.
+- Gör det enklare att hålla ordning på alla referenser som används i olika komponenter och sidor.
+
+Ansvar:
+- Tillhandahåller globala `using`-direktiv så att dessa inte behöver upprepas i varje enskild komponent eller sida.
+*@
+
+@using System
+@using System.Linq
+@using System.Collections.Generic
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@using ContactMaster.Blazor
+@using ContactMaster.Blazor.Components
+@using ContactMaster.Blazor.Components.Shared
+@using ContactMaster.Blazor.Components.Pages
+@using ContactMaster.Blazor.Services
+@using Business.Models
+@using Business.Interfaces
+
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Presentation.Maui.ViewModels"
+             x:Class="Presentation.Maui.Views.CreateContactPage"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Entry Placeholder="Förnamn"
+                   Text="{Binding FirstName}"/>
+
+            <Entry Placeholder="Efternamn"
+                   Text="{Binding LastName}"/>
+
+            <Entry Placeholder="E-post"
+                   Text="{Binding Email}"
+                   Keyboard="Email"/>
+
+            <Entry Placeholder="Telefon"
+                   Text="{Binding PhoneNumber}"
+                   Keyboard="Telephone"/>
+
+            <Entry Placeholder="Gatuadress"
+                   Text="{Binding StreetAddress}"/>
+
+            <Entry Placeholder="Postnummer"
+                   Text="{Binding PostalCode}"
+                   Keyboard="Numeric"/>
+
+            <Entry Placeholder="Ort"
+                   Text="{Binding City}"/>
+
+            <HorizontalStackLayout Spacing="10" Margin="0,20,0,0">
+                <Button Text="Spara"
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="DodgerBlue"
+                        TextColor="White"
+                        WidthRequest="150"/>
+
+                <Button Text="Avbryt"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="LightGray"
+                        TextColor="Black"
+                        WidthRequest="150"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

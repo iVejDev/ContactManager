@@ -1,0 +1,74 @@
+﻿@using ContactMaster.Blazor.Services
+@using ContactMaster.Blazor.Models
+@inject ThemeService ThemeService
+@implements IDisposable
+
+
+
+
+<div class="theme-toggle">
+    <button class="theme-button @(_currentTheme == Theme.Dark ? "dark" : "light")"
+            @onclick="ToggleTheme">
+        <span class="theme-icon">@(_currentTheme == Theme.Dark ? "🌙" : "☀️")</span>
+        @(_currentTheme == Theme.Dark ? "Light Mode" : "Dark Mode")
+    </button>
+</div>
+
+@code {
+    private Theme _currentTheme = Theme.Light;
+
+    protected override void OnInitialized()
+    {
+        _currentTheme = ThemeService.GetCurrentTheme().CurrentTheme;
+        ThemeService.OnThemeChanged += HandleThemeChanged;
+    }
+
+    private void HandleThemeChanged()
+    {
+        _currentTheme = ThemeService.GetCurrentTheme().CurrentTheme;
+        StateHasChanged();
+    }
+
+    private void ToggleTheme()
+    {
+        ThemeService.ToggleTheme();
+    }
+
+    public void Dispose()
+    {
+        ThemeService.OnThemeChanged -= HandleThemeChanged;
+    }
+}
+
+<style>
+    .theme-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 10rem;
+    }
+
+    .theme-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .theme-button.light {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        .theme-button.dark {
+            background-color: #212529;
+            color: #f8f9fa;
+        }
+
+    .theme-icon {
+        font-size: 1.2rem;
+    }
+</style>

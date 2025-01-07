@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>ContactMaster.Blazor</title>
+    <base href="/" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="ContactMaster.Blazor.styles.css" />
+    <link rel="icon" href="data:,">
+
+    <!--
+    Vad gör denna index.html?
+    Syfte:
+    - Huvudfilen för att strukturera och ladda ContactMaster.Blazor-applikationen.
+    - Innehåller grundläggande metadata och referenser till stilar och skript.
+
+    Ansvar:
+    - Ange metadata för språkinställning och responsiv design.
+    - Ladda CSS-filer för applikationens styling.
+    - Ge en bas-URL för att möjliggöra navigering i Blazor-applikationen.
+    - Hantera Blazor-webbkomponenter genom att inkludera Blazor-skript.
+    -->
+
+
+</head>
+
+<body>
+
+    <!-- Dynamisk anpassning för säkerhetsområde på mobila enheter -->
+    <div class="status-bar-safe-area"></div>
+    <!-- Root-element där Blazor-applikationen laddas in -->
+    <div id="app">Loading...</div>
+    <!-- Felmeddelande som visas vid oanvändbara eller okontrollerade fel -->
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <!-- Blazor-webbvy-skript som ansvarar för att starta och köra applikationen -->
+    <script src="_framework/blazor.webview.js" autostart="false"></script>
+
+</body>
+
+</html>

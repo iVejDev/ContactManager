@@ -1,0 +1,73 @@
+﻿@page "/addcontact"
+@using Business.Models
+@using ContactMaster.Blazor.Services
+@using Business.Interfaces
+@inject ThemeService ThemeService
+@inject IContactService ContactService
+@implements IDisposable
+
+
+<!--
+                                    Vad gör denna sida?
+Syfte:
+- Tillhandahåller ett gränssnitt för att lägga till nya kontakter i applikationen.
+
+Ansvar:
+- Integrera med kontakt- och temahanteringstjänster.
+- Hantera teman (mörkt/ljust läge) och uppdatera sidan dynamiskt vid temabyte.
+- Använda en återanvändbar komponent, `ContactForm`, för att samla in och spara kontaktinformation.
+-->
+
+
+<div class="page-container @ThemeClass">
+    <h2>Lägg till ny kontakt</h2>
+    
+    <!-- Kontaktformulär för att lägga till en ny kontakt -->
+
+    <ContactForm Contact="new Contact()" 
+                 IsEdit="false"
+                 ThemeClass="@ThemeClass"
+                 OnSaved="StateHasChanged" />
+</div>
+
+@code {
+
+    // Dynamisk CSS-klass för att hantera mörkt/ljust tema
+    private string ThemeClass => ThemeService.GetCurrentTheme().GetThemeClass();
+
+    // Registrerar en händelse för att uppdatera sidan när temat ändras
+    protected override void OnInitialized()
+    {
+        ThemeService.OnThemeChanged += StateHasChanged;
+    }
+
+    // Rensar upp händelsehanteraren för att undvika minnesläckor
+    public void Dispose()
+    {
+        ThemeService.OnThemeChanged -= StateHasChanged;
+    }
+}
+
+<style>
+
+        /* Grundläggande styling för sidan */
+    .page-container {
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+        /* Styling för mörkt läge */
+    .page-container.dark-mode {
+        background-color: #121212;
+        color: #ffffff;
+    }
+        /* Styling för ljust läge */
+    .page-container.light-mode {
+        background-color: #f5f5f5;
+        color: #333333;
+    }
+        /* Rubrikstil */
+    h2 {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+</style>

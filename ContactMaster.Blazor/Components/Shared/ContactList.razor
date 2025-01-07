@@ -1,0 +1,271 @@
+﻿@using Business.Models
+@using Business.Interfaces
+@using ContactMaster.Blazor.Services
+
+
+
+@inject IContactService ContactService
+@inject ThemeService ThemeService
+@inject NotificationService NotificationService
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+
+
+
+<div class="contact-list-container @ThemeClass">
+    <div class="header">
+        <div class="search-box">
+            <input type="text"
+                   placeholder="Sök kontakt..."
+                   @bind-value="SearchTerm"
+                   @bind-value:event="oninput" />
+        </div>
+        <button class="add-button" @onclick="CreateNew">
+            <span>➕</span> Ny Kontakt
+        </button>
+    </div>
+
+    @if (Contacts == null)
+    {
+        <div class="loading">Laddar kontakter...</div>
+    }
+    else if (!Contacts.Any())
+    {
+        <div class="no-contacts">Inga kontakter hittade.</div>
+    }
+    else
+    {
+        <div class="contacts-grid">
+            @foreach (var contact in FilteredContacts)
+            {
+                <div class="contact-card">
+                    <div class="contact-info">
+                        <h3>@contact.FirstName @contact.LastName</h3>
+                        <p><span>📧</span> @contact.Email</p>
+                        <p><span>📱</span> @contact.PhoneNumber</p>
+                        <p><span>📍</span> @contact.City</p>
+                    </div>
+                    <div class="contact-actions">
+                        <button class="edit-button" @onclick="() => EditContact(contact)">
+                            Redigera
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Contact> Contacts { get; set; } = new List<Contact>();
+    private string SearchTerm { get; set; } = "";
+    [Parameter] public string ThemeClass { get; set; } = "light-mode";
+    private System.Threading.Timer _timer;
+
+    private IEnumerable<Contact> FilteredContacts =>
+        Contacts.Where(c => string.IsNullOrWhiteSpace(SearchTerm) ||
+                           c.FirstName.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                           c.LastName.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                           c.Email.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(c => c.FirstName)
+                .ThenBy(c => c.LastName);
+
+    protected override void OnInitialized()
+    {
+        LoadContacts();
+        ThemeClass = ThemeService.GetCurrentTheme().GetThemeClass();
+
+        _timer = new System.Threading.Timer(async _ =>
+        {
+            await InvokeAsync(async () =>
+            {
+                LoadContacts();
+                StateHasChanged();
+            });
+        }, null, 0, 5000);
+    }
+
+    private void LoadContacts()
+    {
+        try
+        {
+            var contactList = ContactService.GetAllContacts();
+            Contacts = contactList.ToList();
+        }
+        catch (Exception ex)
+        {
+            NotificationService.ShowError(ex.Message);
+        }
+    }
+
+    private void CreateNew()
+    {
+        NavigationManager.NavigateTo("/addcontact");
+    }
+
+    private void EditContact(Contact contact)
+    {
+        NavigationManager.NavigateTo($"/editcontact/{contact.Id}");
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+}
+
+<style>
+    /* Animationer */
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .contact-list-container {
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+        .contact-list-container.light-mode {
+            background-color: #f5f5f5;
+            color: #333333;
+        }
+
+        .contact-list-container.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+    .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+        .search-box input {
+            padding: 8px 16px 8px 40px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            width: 300px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+
+        .search-box input:focus {
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+            outline: none;
+        }
+
+    .dark-mode .search-box input {
+        background-color: #2d2d2d;
+        border-color: #404040;
+        color: white;
+    }
+
+    .contacts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+    }
+
+    .contact-card {
+        background: linear-gradient(135deg, #ffffff, #f9f9f9);
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        animation: slideIn 0.3s ease-out;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dark-mode .contact-card {
+        background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+        color: white;
+    }
+
+    .contact-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .add-button {
+        background-color: #4CAF;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        box-shadow: 0 4px 6px rgba(76, 175, 80, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .add-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
+
+        .edit-button{
+        background-color: #9d8bda;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        }
+
+        .edit-button:hover {
+            background-color: #8a78c5;
+            transform: translateY(-2px);
+        }
+
+    .dark-mode .edit-button {
+        background-color: #7c69c7;
+    }
+
+    .loading, .no-contacts {
+        text-align: center;
+        padding: 20px;
+        font-size: 18px;
+        color: #666;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .dark-mode .loading, .dark-mode .no-contacts {
+        color: #aaa;
+    }
+</style>

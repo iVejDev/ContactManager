@@ -1,0 +1,125 @@
+﻿/*
+   Denna komponent implementerar en återanvändbar dialogruta för Blazor.
+   Komponenten kan användas för att visa bekräftelsedialoger, varningar eller meddelanden.
+   Den stödjer både ljust och mörkt tema och är helt anpassningsbar via parametrar.
+*/
+
+@inject NotificationService NotificationService
+
+<!-- Dialog-overlay som täcker hela skärmen när dialogen är synlig -->
+<div class="dialog-overlay" style="display: @(IsVisible ? "flex" : "none")">
+    <!-- Huvudcontainer för dialogrutan med dynamiskt tema -->
+    <div class="dialog-container @ThemeClass">
+        <!-- Titel och meddelandetext -->
+        <h3>@Title</h3>
+        <p>@Message</p>
+
+        <!-- Knappar för användarinteraktion -->
+        <div class="button-group">
+            <!-- Bekräftelseknapp som triggar OnConfirm -->
+            <button class="btn btn-danger" @onclick="OnConfirm">Ja</button>
+            <!-- Avbrytknapp som triggar OnCancel -->
+            <button class="btn btn-secondary" @onclick="OnCancel">Nej</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Parameter för att styra dialogens synlighet
+    [Parameter] public bool IsVisible { get; set; }
+
+    // Parameter för dialogens titel
+    [Parameter] public string Title { get; set; } = "";
+
+    // Parameter för dialogens huvudmeddelande
+    [Parameter] public string Message { get; set; } = "";
+
+    // Parameter för att styra temaklass (light-mode/dark-mode)
+    [Parameter] public string ThemeClass { get; set; } = "";
+
+    // Callback som anropas när användaren gör ett val
+    [Parameter] public EventCallback<bool> OnResult { get; set; }
+
+    // Metod som anropas när användaren bekräftar
+    private async Task OnConfirm()
+    {
+        await OnResult.InvokeAsync(true);
+    }
+
+    // Metod som anropas när användaren avbryter
+    private async Task OnCancel()
+    {
+        await OnResult.InvokeAsync(false);
+    }
+}
+
+<!-- Stilar för dialogkomponenten -->
+<style>
+    /* Overlay som täcker hela skärmen med semi-transparent bakgrund */
+    .dialog-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    /* Huvudcontainer för dialogrutan */
+    .dialog-container {
+        padding: 20px;
+        border-radius: 8px;
+        min-width: 300px;
+        max-width: 500px;
+    }
+
+        /* Mörkt tema för dialogen */
+        .dialog-container.dark-mode {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+
+        /* Ljust tema för dialogen */
+        .dialog-container.light-mode {
+            background-color: #ffffff;
+            color: #2d2d2d;
+        }
+
+    /* Container för knappar med flexbox-layout */
+    .button-group {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    /* Basklass för knappar */
+    .btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.3s;
+    }
+
+        /* Hover-effekt för knappar */
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+    /* Stil för "Ja"-knappen */
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    /* Stil för "Nej"-knappen */
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+</style>

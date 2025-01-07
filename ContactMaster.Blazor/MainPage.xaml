@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ContactMaster.Blazor"
+             x:Class="ContactMaster.Blazor.MainPage">
+
+
+    <!--
+                            Vad gör denna fil?
+    Syfte:
+    - Representerar huvudsidan i applikationen där Blazor-komponenter renderas.
+    - Kombinerar .NET MAUI och Blazor för att visa Blazor-komponenter i en MAUI-app.
+
+    Ansvar:
+    - Definiera en `BlazorWebView` som är kopplad till Blazor-applikationens startfil (index.html).
+    - Ladda och rendera Blazor-komponenter i ett specifikt DOM-element (`#app`).
+    -->
+
+    <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
+
+        <!--
+                        Rotkomponent för Blazor-applikationen:
+        - `Selector="#app"`: Kopplar Blazor-komponenterna till elementet med ID "app" i index.html.
+        - `ComponentType="{x:Type local:Components.Routes}"`: Anger den huvudsakliga Blazor-komponenten som hanterar routning.
+        -->
+        <BlazorWebView.RootComponents>
+            <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
+        </BlazorWebView.RootComponents>
+    </BlazorWebView>
+
+</ContentPage>

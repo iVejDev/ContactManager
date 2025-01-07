@@ -1,0 +1,40 @@
+﻿
+
+@inherits LayoutComponentBase
+@inject ThemeService ThemeService
+
+<div class="main-layout @ThemeClass">
+    @Body
+</div>
+
+@code {
+    private string ThemeClass => ThemeService.GetCurrentTheme().GetThemeClass();
+
+    protected override void OnInitialized()
+    {
+        ThemeService.OnThemeChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ThemeService.OnThemeChanged -= StateHasChanged;
+    }
+}
+
+<style>
+    .main-layout {
+        min-height: 100vh;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .main-layout.dark-mode {
+        background-color: #121212;
+        color: #ffffff;
+    }
+
+    .main-layout.light-mode {
+        background-color: #f5f5f5;
+        color: #333333;
+    }
+</style>

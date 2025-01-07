@@ -1,0 +1,100 @@
+﻿@page "/editcontact/{Id}"
+@using Business.Models
+@using Business.Interfaces
+@using ContactMaster.Blazor.Services
+@using System.Threading.Tasks
+@inject IContactService ContactService
+@inject ThemeService ThemeService
+@inject NavigationManager NavigationManager
+@inject NotificationService NotificationService
+@implements IDisposable
+
+
+<!--
+                            Vad gör denna sida?
+Syfte:
+- Tillhandahåller ett gränssnitt för att redigera befintliga kontakter i applikationen.
+
+Ansvar:
+- Ladda och visa kontaktdata baserat på ett unikt ID (från URL).
+- Integrera kontakt-, navigerings-, tema- och notifieringstjänster.
+- Hantera temabyte dynamiskt.
+- Visa ett formulär för att redigera kontakten och spara ändringar.
+-->
+
+
+<div class="page-container @ThemeClass">
+    @if (_contact == null)
+    {
+        <!-- Visar en laddningsindikator medan kontaktdata hämtas -->
+        <div class="loading">Laddar kontakt...</div>
+    }
+    else
+    {
+        <h2>Redigera kontakt</h2>
+        
+        <!-- Formulär för att redigera kontaktuppgifter -->
+        <ContactForm 
+            Contact="_contact" 
+            IsEdit="true" 
+            ThemeClass="@ThemeClass"
+            OnSaved="HandleSaved" />
+    }
+</div>
+
+@code {
+
+        // Kontaktens unika ID från URL
+    [Parameter] public string Id { get; set; }
+    private Contact _contact;
+
+        // Dynamisk CSS-klass baserat på aktuellt tema
+    private string ThemeClass => ThemeService.GetCurrentTheme().GetThemeClass();
+        // Initierar komponenten och kopplar temahändelser
+    protected override void OnInitialized()
+    {
+        ThemeService.OnThemeChanged += StateHasChanged;
+        LoadContact();
+    }
+        // Laddar kontaktdata från ContactService
+    private void LoadContact()
+    {
+        if (Guid.TryParse(Id, out Guid contactId))
+        {
+            try
+            {
+                _contact = ContactService.GetContactById(contactId);
+                if (_contact == null)
+                {
+                    // Navigerar tillbaka till startsidan om kontakten inte hittas
+                    NavigationManager.NavigateTo("/");
+                    NotificationService.ShowError("Kontakten kunde inte hittas.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Felhantering och notifiering vid fel
+                NavigationManager.NavigateTo("/");
+                NotificationService.ShowError(ex.Message);
+            }
+        }
+        else
+        {
+            // Navigerar tillbaka om ID är ogiltigt
+            NavigationManager.NavigateTo("/");
+            NotificationService.ShowError("Ogiltigt kontakt-ID.");
+        }
+    }
+    
+        // Uppdaterar sidan efter att formuläret sparats
+    private async Task HandleSaved()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+        
+        // Rensar händelsehanterare för att undvika minnesläckor
+    public void Dispose()
+    {
+        ThemeService.OnThemeChanged -= StateHasChanged;
+    }
+}

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ContactMaster.Blazor"
+             x:Class="ContactMaster.Blazor.App">
+
+    <!-- 
+                        Vad gör denna fil?
+    Syfte:
+    - Definierar applikationens resurser och globala inställningar för .NET MAUI.
+    - Tillhandahåller en central plats för att definiera stil, resurser och teman som används i hela applikationen.
+
+    Ansvar:
+    - Inkludera globala resurser som kan återanvändas av flera sidor/komponenter.
+    - Stöder användning av XAML för att skapa enhetlig stil och design i applikationen.
+    -->
+
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <!-- 
+            Här kan du definiera applikationsomfattande resurser, till exempel:
+            - Färger
+            - Typsnitt
+            - Stilar
+            - Teman
+
+            Dokumentation:
+            https://go.microsoft.com/fwlink/?linkid=2282329
+            -->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+
+
+<!--
+                    Vad gör denna fil?
+Syfte:
+- Definierar hur routning och sidnavigering hanteras i Blazor-applikationen.
+- Laddar rätt sida baserat på URL, eller visar ett "Sidan kunde inte hittas"-meddelande vid ogiltiga rutter.
+
+Ansvar:
+- Skapa och konfigurera en router med `<Router>`-komponenten.
+- Tillhandahålla standardlayouten för sidor via `DefaultLayout`.
+- Hantera rutter som inte matchar någon sida genom `<NotFound>`-sektionen.
+-->
+
+<Router AppAssembly="@typeof(MauiProgram).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Components.Shared.MainLayout)" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(Components.Shared.MainLayout)">
+            <p>Sidan kunde inte hittas.</p>
+        </LayoutView>
+    </NotFound>
+</Router>

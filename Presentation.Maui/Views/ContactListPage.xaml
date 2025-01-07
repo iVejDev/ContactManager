@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Presentation.Maui.ViewModels"
+             x:Class="Presentation.Maui.Views.ContactListPage"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <Button Text="Lägg till kontakt" 
+                Command="{Binding AddContactCommand}"
+                Margin="0,0,0,20"/>
+
+        <RefreshView Grid.Row="1" 
+                     Command="{Binding RefreshCommand}" 
+                     IsRefreshing="{Binding IsBusy}">
+            <CollectionView ItemsSource="{Binding Contacts}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10" ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding FirstName}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"/>
+                                <Label Text="{Binding LastName}" 
+                                       FontSize="14"/>
+                                <Label Text="{Binding Email}" 
+                                       FontSize="12" 
+                                       TextColor="Gray"/>
+                                <Label Text="{Binding PhoneNumber}" 
+                                       FontSize="12" 
+                                       TextColor="Gray"/>
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1" 
+                                    Text="Redigera"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ContactListViewModel}}, Path=EditContactCommand}"
+                                    CommandParameter="{Binding .}"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

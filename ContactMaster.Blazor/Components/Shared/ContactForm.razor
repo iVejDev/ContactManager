@@ -1,0 +1,273 @@
+﻿@using Business.Models
+@using Business.Interfaces
+@using Business.Services
+@using ContactMaster.Blazor.Services
+@using System.ComponentModel.DataAnnotations
+@inject IContactService ContactService
+@inject IContactFactory ContactFactory
+@inject NotificationService NotificationService
+@inject NavigationManager NavigationManager
+
+<div class="form-container @ThemeClass">
+    <EditForm Model="@Contact" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="firstName">Förnamn</label>
+            <InputText id="firstName" @bind-Value="Contact.FirstName" class="form-control" />
+            <ValidationMessage For="@(() => Contact.FirstName)" class="validation-message" />
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">Efternamn</label>
+            <InputText id="lastName" @bind-Value="Contact.LastName" class="form-control" />
+            <ValidationMessage For="@(() => Contact.LastName)" class="validation-message" />
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-post</label>
+            <InputText id="email" @bind-Value="Contact.Email" class="form-control" />
+            <ValidationMessage For="@(() => Contact.Email)" class="validation-message" />
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Telefon</label>
+            <InputText id="phone" @bind-Value="Contact.PhoneNumber" class="form-control" />
+            <ValidationMessage For="@(() => Contact.PhoneNumber)" class="validation-message" />
+        </div>
+
+        <div class="form-group">
+            <label for="street">Gatuadress</label>
+            <InputText id="street" @bind-Value="Contact.StreetAddress" class="form-control" />
+            <ValidationMessage For="@(() => Contact.StreetAddress)" class="validation-message" />
+        </div>
+
+        <div class="form-group">
+            <label for="postal">Postnummer</label>
+            <InputText id="postal" @bind-Value="Contact.PostalCode" class="form-control" />
+            <ValidationMessage For="@(() => Contact.PostalCode)" class="validation-message" />
+        </div>
+
+        <div class="form-group">
+            <label for="city">Ort</label>
+            <InputText id="city" @bind-Value="Contact.City" class="form-control" />
+            <ValidationMessage For="@(() => Contact.City)" class="validation-message" />
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">@(IsEdit ? "Uppdatera" : "Spara")</button>
+            <button type="button" class="btn btn-secondary" @onclick="OnCancel">Avbryt</button>
+            @if (IsEdit)
+            {
+                    <button type="button" class="btn btn-danger" @onclick="OnDelete">Ta bort</button>
+            }
+        </div>
+    </EditForm>
+</div>
+
+@if (showDeleteDialog)
+{
+        <div class="dialog-overlay">
+            <div class="dialog-container @ThemeClass">
+                <h3>Bekräfta borttagning</h3>
+                <p>Är du säker på att du vill ta bort @Contact.FirstName @Contact.LastName?</p>
+                <div class="button-group">
+                    <button class="btn btn-danger" @onclick="ConfirmDelete">Ja</button>
+                    <button class="btn btn-secondary" @onclick="CancelDelete">Nej</button>
+                </div>
+            </div>
+        </div>
+}
+
+@code {
+    [Parameter] public Contact Contact { get; set; } = new();
+    [Parameter] public bool IsEdit { get; set; }
+    [Parameter] public EventCallback OnSaved { get; set; }
+    [Parameter] public string ThemeClass { get; set; } = "";
+
+    private bool showDeleteDialog = false;
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            // Validera inputs innan submit
+            var context = new ValidationContext(Contact);
+            var results = new List<ValidationResult>();
+            if (!Validator.TryValidateObject(Contact, context, results, true))
+            {
+                foreach (var error in results)
+                {
+                    await NotificationService.ShowError(error.ErrorMessage);
+                }
+                return;
+            }
+
+            if (IsEdit)
+            {
+                ContactService.UpdateContact(Contact);
+                await NotificationService.ShowSuccess("Kontakten har uppdaterats!");
+            }
+            else
+            {
+                ContactService.CreateContact(Contact);
+                await NotificationService.ShowSuccess("Kontakten har skapats!");
+            }
+            await OnSaved.InvokeAsync();
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            await NotificationService.ShowError(ex.Message);
+        }
+    }
+
+    private void OnCancel()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void OnDelete()
+    {
+        showDeleteDialog = true;
+    }
+
+    private async Task ConfirmDelete()
+    {
+        try
+        {
+            ContactService.DeleteContact(Contact.Id);
+            await NotificationService.ShowSuccess("Kontakten har tagits bort!");
+            showDeleteDialog = false;
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            await NotificationService.ShowError(ex.Message);
+        }
+    }
+
+    private void CancelDelete()
+    {
+        showDeleteDialog = false;
+    }
+}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .form-container.dark-mode {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
+
+    .form-container.light-mode {
+        background-color: #ffffff;
+        color: #2d2d2d;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .form-control.invalid {
+        border-color: #dc3545;
+    }
+
+    .validation-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .button-group {
+        margin-top: 1.5rem;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    /* Dialog styles */
+    .dialog-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .dialog-container {
+        padding: 20px;
+        border-radius: 8px;
+        min-width: 300px;
+        max-width: 500px;
+    }
+
+    .dialog-container.dark-mode {
+        background-color: #2d2d2d;
+        color: #ffffff;
+    }
+
+    .dialog-container.light-mode {
+        background-color: #ffffff;
+        color: #2d2d2d;
+    }
+
+    .dialog-container h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+
+    /* Dark mode input styles */
+    .dark-mode .form-control {
+        background-color: #3d3d3d;
+        border-color: #4d4d4d;
+        color: #ffffff;
+    }
+
+    .dark-mode .form-control:focus {
+        background-color: #3d3d3d;
+        border-color: #007bff;
+        color: #ffffff;
+    }
+</style>
