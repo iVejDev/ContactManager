@@ -1,57 +1,74 @@
-# ContactManager
+ContactManager
+A Contact Management Application built with Blazor
+Overview
+This project is a submission that implements a contact management application meeting both pass (G) and distinction (VG) criteria. Built with C# and Blazor, it features comprehensive contact management functionality and includes Dark Mode support.
+Features
+Basic Requirements (G)
+Console Application
+
+View all contacts
+Create new contacts
+Save contacts to JSON file
+Load contacts from JSON file on startup and updates
+Implementation of SOLID principles
+Unit tests for methods that don't require mocking
+
+Advanced Requirements (VG)
+Blazor GUI Application
+
+Complete contact listing page with detailed views
+New contact creation interface
+Contact editing and deletion capabilities
+JSON-based persistence with automatic loading
+Implementation of Dependency Injection
+Multiple design patterns including:
+
+Service Pattern
+Factory Pattern
 
 
-Kontaktlista - Blazor Applikation
-Detta är en inlämningsuppgift där jag har skapat en kontaktlista-applikation som uppfyller kraven för både godkänt (G) och väl godkänt (VG). Applikationen är byggd med C# och Blazor och inkluderar funktionalitet för att hantera kontakter samt stöd för mörkt läge (Dark Mode).
+Comprehensive unit testing with mocking
+User-toggleable Dark Mode
 
-Funktionalitet:
+Technical Stack
+Core Technologies
 
-Godkänt (G)
-Konsolapplikation: 
-    En applikation byggd som en konsolapplikation med följande funktioner:
-    *Lista alla kontakter.
-    *Skapa en ny kontakt.
-    *Spara kontakter i en .json-fil.
-    *Läsa in kontakter från .json-fil vid start och vid uppdateringar.
-    *Tillämpning av SOLID-principer.
-    *Enhetstester för metoder som kan testas utan mockning.
+Language: C#
+Framework: Blazor
+Design Patterns:
 
-Väl godkänt (VG)
-GUI-applikation: En Blazor-applikation med följande funktioner:
-    *En sida som listar alla kontakter med deras detaljer.
-    *En sida för att skapa nya kontakter.
-    *Möjlighet att redigera eller ta bort kontakter.
-    *Kontakterna sparas i en .json-fil och laddas in vid start och uppdateringar.
-    *Implementering av Dependency Injection.
-    *Användning av flera design patterns, inklusive:
-      **Service Pattern
-      **Factory Pattern
-    *Enhetstester med mockning där det behövs.
-    *Dark Mode-funktionalitet som användaren kan växla mellan.
+SOLID principles
+Service Pattern
+Factory Pattern
 
-Tekniker och verktyg
-    *Programmeringsspråk: C#
-    *Framework: Blazor
-    *Design Patterns: SOLID, Service Pattern, Factory Pattern
-    *JSON-hantering: För att spara och läsa kontakter.
-    *Dependency Injection: För att hantera tjänster och funktionalitet.
 
-Testning: Enhetstester (med och utan mockning).
-Dark Mode: Dynamisk växling mellan ljus och mörk design.
+Data Storage: JSON file handling
+Architecture: Dependency Injection
+Testing: Unit tests (with and without mocking)
+UI: Dynamic dark/light theme switching
+
+AI Assistance Note
+Parts of this project were generated using AI assistance (e.g., ChatGPT). These instances are documented in the code comments, including explanations of functionality and any modifications made.
+Installation Guide
+Console Application
+
+Run the executable from the console project, or
+Build the project from source using Visual Studio
+
+Blazor Application
+
+Open the project in Visual Studio
+Press F5 or start debugging to run the application
+Toggle Dark Mode using the button in the top-right corner
 
 
 
-Viss kod i projektet har genererats med hjälp av AI (t.ex. ChatGPT). Detta anges i kommentarerna där det används. Koden har granskats, modifierats och kommenterats för att förklara dess funktion.
+Getting Started
 
-Installation och körning
+Clone the repository
+Open the solution in Visual Studio
+Restore NuGet packages
+Build and run the project
 
-1. Konsolapplikation:
-    *Kör .exe-filen från konsolprojektet eller bygg projektet från källkoden i Visual Studio.
-
-2.Blazor-applikation:
-    *Öppna projektet i Visual Studio.
-    *Kör applikationen genom att trycka på F5 eller starta den i debug-läge.
-    *Dark Mode kan aktiveras/deaktiveras via knappen i topphöger.
-
-3. Skärmbilder
-Ljus läge + Mörkt läge
+Contributing
+Feel free to submit issues and enhancement requests.
