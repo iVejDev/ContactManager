@@ -71,7 +71,7 @@ ContactManager/
 #### Option 1: Using the Blazor Application
 1. **Clone the repository**
    ```
-   git clone https://github.com/yourusername/ContactManager.git
+   git clone https://github.com/iVejDev/ContactManager.git
    cd ContactManager
    ```
 
