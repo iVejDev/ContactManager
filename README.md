@@ -1,74 +1,164 @@
-ContactManager
-A Contact Management Application built with Blazor
-Overview
-This project is a submission that implements a contact management application meeting both pass (G) and distinction (VG) criteria. Built with C# and Blazor, it features comprehensive contact management functionality and includes Dark Mode support.
-Features
-Basic Requirements (G)
-Console Application
+# 📇 ContactManager
 
-View all contacts
-Create new contacts
-Save contacts to JSON file
-Load contacts from JSON file on startup and updates
-Implementation of SOLID principles
-Unit tests for methods that don't require mocking
+![.NET Core](https://img.shields.io/badge/.NET%20Core-7.0-512BD4?style=flat-square&logo=dotnet)
+![Blazor](https://img.shields.io/badge/Blazor-512BD4?style=flat-square&logo=blazor)
+![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)
 
-Advanced Requirements (VG)
-Blazor GUI Application
+A modern and intuitive contact management application built with Blazor that helps you organize and manage your contacts efficiently.
 
-Complete contact listing page with detailed views
-New contact creation interface
-Contact editing and deletion capabilities
-JSON-based persistence with automatic loading
-Implementation of Dependency Injection
-Multiple design patterns including:
+![ContactManager Screenshot](https://via.placeholder.com/800x450?text=ContactManager+Screenshot)
 
-Service Pattern
-Factory Pattern
+## ✨ Key Features
 
+### 🌟 User Interface
+- **Intuitive Blazor GUI** - Clean, responsive design for easy navigation
+- **Dark/Light Theme** - Toggle between dark and light modes for comfortable viewing
+- **Detailed Contact Views** - See all your contact information at a glance
 
-Comprehensive unit testing with mocking
-User-toggleable Dark Mode
+### 📱 Contact Management
+- **Comprehensive Contact Details** - Store names, phone numbers, emails, and more
+- **Quick Search** - Find contacts instantly as you type
+- **Easy Editing** - Update or remove contacts with just a few clicks
+- **Persistent Storage** - All changes are automatically saved to JSON
 
-Technical Stack
-Core Technologies
+### 🛠️ Technical Excellence
+- **SOLID Architecture** - Built following best practices in software design
+- **Multiple Design Patterns** - Leverages Service Pattern and Factory Pattern
+- **Dependency Injection** - Modular components for better maintainability
+- **Comprehensive Testing** - Unit tests ensure reliability and stability
 
-Language: C#
-Framework: Blazor
-Design Patterns:
+## 🔧 Technology Stack
 
-SOLID principles
-Service Pattern
-Factory Pattern
+### Frontend
+- **Blazor WebAssembly** - Rich interactive UI running in the browser
+- **CSS/Bootstrap** - Responsive design that works on all devices
+- **JavaScript Interop** - For enhanced browser interactions
 
+### Backend
+- **C# / .NET Core** - Robust and modern programming framework
+- **JSON Data Storage** - Lightweight persistence without database requirements
+- **Service-based Architecture** - Clean separation of concerns
 
-Data Storage: JSON file handling
-Architecture: Dependency Injection
-Testing: Unit tests (with and without mocking)
-UI: Dynamic dark/light theme switching
+## 📋 Project Structure
 
-AI Assistance Note
-Parts of this project were generated using AI assistance (e.g., ChatGPT). These instances are documented in the code comments, including explanations of functionality and any modifications made.
-Installation Guide
-Console Application
+```
+ContactManager/
+├── ContactManager.UI/          # Blazor WebAssembly project
+│   ├── Components/             # Reusable UI components
+│   ├── Pages/                  # Application pages
+│   ├── Services/               # Business logic and data services
+│   └── wwwroot/                # Static web assets
+│
+├── ContactManager.Core/        # Core business logic
+│   ├── Models/                 # Domain models
+│   ├── Interfaces/             # Service contracts
+│   └── Services/               # Service implementations
+│
+├── ContactManager.Console/     # Console application version
+│
+└── ContactManager.Tests/       # Unit and integration tests
+```
 
-Run the executable from the console project, or
-Build the project from source using Visual Studio
+## 🚀 Getting Started
 
-Blazor Application
+### Prerequisites
+- **.NET 7.0 SDK** or later
+- **Visual Studio 2022** or compatible IDE
+- A modern web browser
 
-Open the project in Visual Studio
-Press F5 or start debugging to run the application
-Toggle Dark Mode using the button in the top-right corner
+### Installation Steps
 
+#### Option 1: Using the Blazor Application
+1. **Clone the repository**
+   ```
+   git clone https://github.com/yourusername/ContactManager.git
+   cd ContactManager
+   ```
 
+2. **Restore dependencies**
+   ```
+   dotnet restore
+   ```
 
-Getting Started
+3. **Run the application**
+   ```
+   cd ContactManager.UI
+   dotnet run
+   ```
 
-Clone the repository
-Open the solution in Visual Studio
-Restore NuGet packages
-Build and run the project
+4. **Access the application**
+   
+   Open your browser and navigate to `https://localhost:5001`
 
-Contributing
-Feel free to submit issues and enhancement requests.
+#### Option 2: Using the Console Application
+1. **Navigate to the console project**
+   ```
+   cd ContactManager.Console
+   ```
+
+2. **Run the application**
+   ```
+   dotnet run
+   ```
+
+## 🎯 Usage Guide
+
+### Adding a New Contact
+1. Click the "Add Contact" button in the navigation bar
+2. Fill in the contact details form
+3. Click "Save" to add the contact to your list
+
+### Viewing Contacts
+- All contacts are displayed on the home page
+- Click on any contact to view detailed information
+
+### Editing a Contact
+1. Navigate to contact details
+2. Click the "Edit" button
+3. Update the information as needed
+4. Click "Save" to confirm changes
+
+### Deleting a Contact
+1. Navigate to contact details
+2. Click the "Delete" button
+3. Confirm the deletion in the dialog
+
+### Toggling Dark Mode
+- Click the theme toggle button in the top-right corner of the application
+
+## 🧪 Testing
+
+The project includes comprehensive unit tests to ensure functionality and reliability:
+
+```
+dotnet test
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🔍 Implementation Notes
+
+- **SOLID Principles** - The application follows Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion principles
+- **Service Pattern** - Services are used to encapsulate business logic and data access
+- **Factory Pattern** - Used for creating different types of contacts and service instances
+
+## 🙏 Acknowledgements
+
+- This project was built as a learning exercise in modern C# and Blazor development
+- Parts of the project were created with AI assistance (documented in code comments)
+
+---
+
+&copy; 2025 Your Name. All rights reserved.
